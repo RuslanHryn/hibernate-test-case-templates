@@ -1,5 +1,6 @@
 package org.hibernate.bugs;
 
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +32,31 @@ class JPAUnitTestCase {
 	void hhh123Test() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		// Do stuff...
-		entityManager.getTransaction().commit();
+
+        MultibankFinancingSchedule multibankFinancingSchedule = new MultibankFinancingSchedule();
+        multibankFinancingSchedule.setRef("ref2");
+        entityManager.persist(multibankFinancingSchedule);
+
+        MultibankFinancingScope multibankFinancingScope = new MultibankFinancingScope();
+        multibankFinancingScope.setRef("ref1");
+        multibankFinancingScope.setSchedule(multibankFinancingSchedule);
+
+        multibankFinancingScope.getSchedule().setScope(null);
+        entityManager.persist(multibankFinancingScope.getSchedule());
+        entityManager.persist(multibankFinancingScope);
+        multibankFinancingScope.getSchedule().setScope(multibankFinancingScope);
+        entityManager.flush();
+        entityManager.clear();
+        entityManager.getTransaction().commit();
+
+        entityManager.getTransaction().begin();
+
+        entityManager.createQuery("select multibankFinancingSchedule\n"
+                + "from MultibankFinancingSchedule multibankFinancingSchedule\n"
+                + "where multibankFinancingSchedule.ref = 'ref2'", MultibankFinancingSchedule.class).getResultList();
+
+        entityManager.getTransaction().commit();
+
 		entityManager.close();
 	}
 }
