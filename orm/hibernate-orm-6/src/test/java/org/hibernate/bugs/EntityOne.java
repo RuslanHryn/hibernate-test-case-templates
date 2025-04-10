@@ -6,23 +6,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Version;
 
 @Entity
-public class MultibankFinancingSchedule {
+public class EntityOne {
 
     @Id
-    @SequenceGenerator(name = "CRX_ID_GENERATOR", sequenceName = "CRX_ID_SEQ", allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRX_ID_GENERATOR")
-    @Column(name = "id")
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id = null;
 
     @Column
     private String ref;
 
-    @OneToOne(optional = true, mappedBy = "schedule")
-    private MultibankFinancingScope scope;
+    @OneToOne(optional = false)
+    private EntityTwo entityTwo;
 
     @Version
     @Column(nullable = false)
@@ -44,12 +41,12 @@ public class MultibankFinancingSchedule {
         this.ref = ref;
     }
 
-    public MultibankFinancingScope getScope() {
-        return scope;
+    public EntityTwo getEntityTwo() {
+        return entityTwo;
     }
 
-    public void setScope(MultibankFinancingScope scope) {
-        this.scope = scope;
+    public void setEntityTwo(EntityTwo schedule) {
+        this.entityTwo = schedule;
     }
 
     public Integer getVersion() {

@@ -2,31 +2,24 @@ package org.hibernate.bugs;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Version;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-public class MultibankFinancingScope {
+public class EntityTwo {
 
     @Id
-    @SequenceGenerator(name = "CRX_ID_GENERATOR", sequenceName = "CRX_ID_SEQ", allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRX_ID_GENERATOR")
-    @Column(name = "id")
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id = null;
 
     @Column
     private String ref;
 
-    @OneToOne(optional = false)
-    private MultibankFinancingSchedule schedule;
+    @OneToOne(mappedBy = "entityTwo")
+    private EntityOne entityOne;
 
     @Version
     @Column(nullable = false)
@@ -48,12 +41,12 @@ public class MultibankFinancingScope {
         this.ref = ref;
     }
 
-    public MultibankFinancingSchedule getSchedule() {
-        return schedule;
+    public EntityOne getEntityOne() {
+        return entityOne;
     }
 
-    public void setSchedule(MultibankFinancingSchedule schedule) {
-        this.schedule = schedule;
+    public void setEntityOne(EntityOne scope) {
+        this.entityOne = scope;
     }
 
     public Integer getVersion() {
